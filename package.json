@@ -1,0 +1,41 @@
+{
+  "name": "luck7-fetch",
+  "author": "584069777@qq.com",
+  "license": "ISC",
+  "version": "0.0.1",
+  "keywords": [
+    "ajax",
+    "fetch",
+    "project"
+  ],
+  "description": "A tool to manage AJAX of project",
+  "files": [
+    "dist"
+  ],
+  "main": "dist/index.umd.js",
+  "typings": "dist/index.d.ts",
+  "scripts": {
+    "build": "rollup -c"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "rollup": "^0.66.0",
+    "rollup-plugin-babel": "^3.0.4",
+    "rollup-plugin-copy": "^3.4.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-pluginutils": "^1.5.2"
+  },
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wocanbe/luck7-fetch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wocanbe/luck7-fetch.git/issues"
+  },
+  "homepage": "https://github.com/wocanbe/luck7-fetch.git#readme"
+}
