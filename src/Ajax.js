@@ -99,12 +99,15 @@ class Ajax {
     }
     reqUrl = this[baseURL] + reqUrl
     let reqData = reqConfig.data
-    delete reqConfig.data
     if (reqConfig.method === 'GET') {
       reqUrl = reqUrl + json2query(reqData)
+    } else if (reqData instanceof FormData) {
+      if (reqConfig.headers) delete reqConfig.headers['Content-Type']
+      reqConfig.body = reqData
     } else {
       reqConfig.body = JSON.stringify(reqData)
     }
+    delete reqConfig.data
     return new Promise(async (resolve, reject) => {
       const outNo = setTimeout(() => reject(new Error('fetch timeout')), reqConfig.timeout)
       delete reqConfig.timeout

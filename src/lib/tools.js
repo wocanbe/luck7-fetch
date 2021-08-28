@@ -53,11 +53,13 @@ function prefetch (url, params, isCros) {
 }
 function getAjaxConfig (reqConfig, params) {
   let reqCfg = cloneJson(reqConfig.options)
-  let data = cloneJson(params)
+  let data
   if (reqConfig.method) reqCfg.method = reqConfig.method
   if (params instanceof FormData) {
-    reqCfg.headers['Content-Type'] = 'multipart/form-data'
-  } else data = mergeJson(reqConfig.options.data, params)
+    data = params
+  } else {
+    data = mergeJson(reqConfig.options.data, params)
+  }
 
   let reqUrl
   try {
