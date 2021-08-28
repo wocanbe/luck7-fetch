@@ -6,6 +6,8 @@ const globals = {
   'babel-runtime/core-js/json/stringify': 'BabelCore.JsonStringfy',
   'babel-runtime/core-js/promise': 'BabelCore.Promise',
   'babel-runtime/core-js/symbol': 'BabelCore.symbol',
+  'babel-runtime/regenerator': 'BabelCore.regenerator',
+  'babel-runtime/helpers/asyncToGenerator': 'BabelHelpers.asyncToGenerator',
   'babel-runtime/helpers/classCallCheck': 'BabelHelpers.classCallCheck',
   'babel-runtime/helpers/createClass': 'BabelHelpers.createClass'
 }

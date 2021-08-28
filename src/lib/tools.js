@@ -52,21 +52,20 @@ function prefetch (url, params, isCros) {
   return domain + url
 }
 function getAjaxConfig (reqConfig, params) {
-  const reqCfg = {
-    url: '',
-    options: {}
-  }
+  let reqUrl
+  let reqCfg = reqConfig.options
   let data = params
+  if (reqConfig.method) reqCfg.method = reqConfig.method
   if (params instanceof FormData) {
-    reqCfg.options.headers['Content-Type'] = 'multipart/form-data'
+    reqCfg.headers['Content-Type'] = 'multipart/form-data'
   } else data = mergeJson(reqConfig.options.data, params)
   try {
-    reqCfg.url = prefetch(reqConfig.url, data, reqConfig.isCros)
+    reqUrl = prefetch(reqConfig.url, data, reqConfig.isCros)
   } catch (e) {
     return new Error(lang.paramError.replace('#param#', e.message))
   }
-  reqCfg.options.data = data
-  return reqCfg
+  reqCfg.data = data
+  return [reqUrl, reqCfg]
 }
 
-export {checkList, checkAllowMethod, getAjaxConfig}
+export {checkList, checkItem, checkAllowMethod, getAjaxConfig}

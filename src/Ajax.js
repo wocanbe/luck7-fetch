@@ -1,14 +1,14 @@
 import {isFun, isStr, isArr, isObj, isBool, json2query, mergeJson} from './lib/util'
 import defaultLang from './lib/lang'
-import {checkList, checkAllowMethod, getAjaxConfig} from './lib/tools'
+import {checkList, checkItem, checkAllowMethod, getAjaxConfig} from './lib/tools'
 
-const ajaxList = Symbol('api')
-const methodList = Symbol('method')
-const strictMode = Symbol('mode')
-const defaultCfg = Symbol('default')
-const baseURL = Symbol('base')
-const getCfg = Symbol('get')
-const single = Symbol('single')
+const ajaxList = Symbol() // api
+const methodList = Symbol() // method
+const strictMode = Symbol() // mode
+const defaultCfg = Symbol() // default
+const baseURL = Symbol() // base
+const getCfg = Symbol() // get
+const single = Symbol() // single
 const dafaultConfig = {
   timeout: 120000 // 默认超时2分钟
 }
@@ -71,9 +71,11 @@ class Ajax {
     return reqConfig
   }
   [single] (apiName, params) {
-    let reqConfig
+    let reqUrl, reqConfig
     try {
-      reqConfig = this[getCfg](apiName, params)
+      const lCfg = this[getCfg](apiName, params)
+      reqUrl = lCfg[0]
+      reqConfig = lCfg[1]
     } catch (e) {
       return Promise.reject(e)
     }
@@ -96,33 +98,33 @@ class Ajax {
         if (filterObj.response) sucessFun = filterObj.response
       }
     }
-    let reqUrl = this[baseURL] + reqConfig.url
-    if (reqConfig.options.method === 'GET') {
-      reqUrl = reqUrl + json2query(data)
-      delete reqConfig.options.data
+    reqUrl = this[baseURL] + reqUrl
+    let reqData = reqConfig.data
+    delete reqConfig.data
+    if (reqConfig.method === 'GET') {
+      reqUrl = reqUrl + json2query(reqData)
+    } else {
+      reqConfig.body = JSON.stringify(reqData)
     }
-    return new Promise((resolve, reject) => {
-      const outNo = setTimeout(() => reject(new Error('fetch timeout')), reqConfig.options.timeout)
-      delete reqConfig.options.timeout
-      fetch(reqUrl, reqConfig.options).then(res => {
-        clearTimeout(outNo)
+    return new Promise(async (resolve, reject) => {
+      const outNo = setTimeout(() => reject(new Error('fetch timeout')), reqConfig.timeout)
+      delete reqConfig.timeout
+      try {
+        const res = await fetch(reqUrl, reqConfig)
         if (res.status == 200) {
-          try {
-            const resData = res.json()
-            const data = sucessFun ? sucessFun(resData) : resData
-            resolve(data)
-          } catch (e) {
-            reject(e)
-          }
+          const resData = await res.json()
+          const data = sucessFun ? sucessFun(resData) : resData
+          resolve(data)
         } else {
           // 捕捉2XX(除200),304之类的返回
-          reject(new Error(defaultLang.netError.replace('#status#', res.status)))
+          throw new Error(defaultLang.netError.replace('#status#', res.status))
         }
-      }).catch((err) => {
-        clearTimeout(outNo)
+      } catch (err) {
         if (errorFun) errorFun(err)
         else reject(err)
-      })
+      } finally {
+        clearTimeout(outNo)
+      }
     })
   }
 }

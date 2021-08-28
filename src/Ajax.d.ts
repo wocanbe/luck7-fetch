@@ -6,6 +6,7 @@ interface requset {
 }
 interface api {
   url:string, // 请求地址，必填且不能为空
+  method?:string, // 请求方式，默认值为GET，优先级高于request中的method
   options?: requset
 }
 

@@ -31,7 +31,7 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
     options: {
       headers: {...},
       method: 'GET',
-      timeout: 120000
+      timeout: 120000 // 单位毫秒
     } // 请求配置项
   }
   ```
@@ -77,9 +77,9 @@ const list = {
   demo2: {
     method: 'GET', // 默认值为POST
     url: '/mock2', // 请求地址，必填且不能为空
-    data: {}, // 请求参数，可以进行一些特殊写法，如写成'vuex.xxxx'，然后在methods中处理成对应的vuex数据。
     options: { // 请求配置项
-      timeout: 1000 // 请求超时时间
+      timeout: 1000, // 请求超时时间
+      data: {} // 请求参数，可以进行一些特殊写法，如写成'vuex.xxxx'，然后在methods中处理成对应的vuex数据。
     }
   },
   // 使用URL参数（:path）
@@ -87,7 +87,7 @@ const list = {
   login: '/login',
 }
 const baseURL = '/mock'
-const commonConfigs = { // ajax配置
+const ajaxConfigs = { // ajax配置
   // method: 'GET', // 框架默认值
   // lang
   baseURL
@@ -100,7 +100,7 @@ const methods = {
     return {
       request (req) {
         const token = sessionStorage.getItem('token')
-        req.options['headers'] = {'Access-token': token}
+        req.headers = {'Access-token': token}
         const data = req.data
         const userid = sessionStorage.getItem('userid')
         const backData = {userid}
@@ -135,14 +135,14 @@ const methods = {
     }
   }
 }
-export {list, commonConfigs, ajaxConfigs, methods}
+export {list, ajaxConfigs, methods}
 
 // src/utils/ajax.js
 import isFunction from 'lodash/isFunction'
 import Ajax from 'luck7-ajax'
-import {list, commonConfigs, ajaxConfigs} from '../config/ajax'
+import {list, ajaxConfigs, methods} from '../config/ajax'
 
-const _ajax = new Ajax(list, commonConfigs, ajaxConfigs, methods)
+const _ajax = new Ajax(list, ajaxConfigs, methods)
 
 const ajax = function (apiName, params) {
   return _ajax.do(apiName, params)
