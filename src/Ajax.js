@@ -1,4 +1,4 @@
-import {isFun, isStr, isArr, isObj, isBool, json2query, mergeJson} from './lib/util'
+import {isFun, isStr, isArr, isObj, isBool, json2query, cloneJson, mergeJson} from './lib/util'
 import defaultLang from './lib/lang'
 import {checkList, checkItem, checkAllowMethod, getAjaxConfig} from './lib/tools'
 
@@ -55,7 +55,7 @@ class Ajax {
     let localConfig
     if (isStr(apiName)) {
       const apiConfig = this[ajaxList][apiName]
-      if (apiConfig) localConfig = apiConfig
+      if (apiConfig) localConfig = cloneJson(apiConfig)
       else if (this[strictMode]) throw new Error(defaultLang.noConfig.replace('#apiName#', apiName))
       else localConfig = {url: apiName}
     } else {
@@ -65,7 +65,6 @@ class Ajax {
     }
     if (localConfig.options) localConfig.options = mergeJson(this[defaultCfg], localConfig.options)
     else localConfig.options = this[defaultCfg]
-
     const reqConfig = getAjaxConfig(localConfig, params)
     if (reqConfig instanceof Error) throw reqConfig
     return reqConfig

@@ -1,4 +1,4 @@
-import {isStr, mergeJson} from './util'
+import {isStr, cloneJson, mergeJson} from './util'
 import lang from './lang'
 
 function checkAllowMethod (method, key) {
@@ -52,13 +52,14 @@ function prefetch (url, params, isCros) {
   return domain + url
 }
 function getAjaxConfig (reqConfig, params) {
-  let reqUrl
-  let reqCfg = reqConfig.options
-  let data = params
+  let reqCfg = cloneJson(reqConfig.options)
+  let data = cloneJson(params)
   if (reqConfig.method) reqCfg.method = reqConfig.method
   if (params instanceof FormData) {
     reqCfg.headers['Content-Type'] = 'multipart/form-data'
   } else data = mergeJson(reqConfig.options.data, params)
+
+  let reqUrl
   try {
     reqUrl = prefetch(reqConfig.url, data, reqConfig.isCros)
   } catch (e) {

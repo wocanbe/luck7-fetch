@@ -22,9 +22,14 @@ function json2query (json) {
   if (queryArr.length) return '?' + queryArr.join('&')
   else return ''
 }
+function cloneJson (json) {
+  if (json === undefined) return
+  return JSON.parse(JSON.stringify(json))
+}
+
 function mergeJson (to, from) {
   let res = {}
-  if (isObj(to)) res = JSON.parse(JSON.stringify(to))
+  if (isObj(to)) res = cloneJson(to)
   if (isObj(from)) {
     for (const key in from) {
       const toVal = res[key]
@@ -45,4 +50,4 @@ function mergeJson (to, from) {
   }
   return res
 }
-export {isObj, isFun, isArr, isBool, isStr, json2query, mergeJson}
+export {isObj, isFun, isArr, isBool, isStr, json2query, cloneJson, mergeJson}
