@@ -25,7 +25,7 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
   Object类型，对ajax请求的配置(如headers、timeout等)，用于对请求/返回数据进行处理，默认值如下
   ```javascript
   {
-    baseURL: '/', // 请求
+    baseURL: '/',
     lang: Object, // 错误提示文本
     isStrict: true // 是否开启严格模式
     options: { // 可参考fetch的配置，额外引入了timeout配置
@@ -44,7 +44,8 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
     urlError: '配置错误: #apiName#缺少请求地址(url)',
     typeError: '使用错误: 接口参数类型错误',
     noConfig: '使用错误: 接口#apiName#未配置',
-    netError: '服务器错误: 状态码：#status#'
+    netError: '服务器错误: 状态码：#status#',
+    paramError: '缺少URL参数#param#'
   }
   ```
  * apiMethods
@@ -56,7 +57,7 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
     key () { // key的唯一特例是'_',代表通用处理方法,将对所有未配置method的api生效
       return {
         request (req) { /* ... */ }, // 对request参数进行处理
-        response (res) { /* ... */ }, // 对返回数据进行处理
+        response (res) { return res }, // 对返回数据进行处理,返回处理后的数据
         error (err) {} // 对异常进行处理
       }
     }
@@ -84,7 +85,11 @@ const list = {
   },
   // 使用URL参数（:path）
   demo3: '/:id/mock3',
-  login: '/login',
+  demo4: {
+    method: 'GET',
+    isCros: true,  // 跨域请求，url中包含协议(仅支持http和https)的时候必须加
+    url: 'https://my.domain/demo',
+  }
 }
 const baseURL = '/mock'
 const ajaxConfigs = { // ajax配置
@@ -117,7 +122,7 @@ const methods = {
       response (res) {
         if (res.code !== 0) { // 抛出异常
           throw new Error(res.msg)
-        }
+        } else return data.data
       }
     }
   },

@@ -1,4 +1,4 @@
-export default {
+const defaultLang:lang =  {
   noList: '配置错误: 缺少接口配置(list)',
   methodError: '配置错误: #apiName#请求类型异常#method#',
   urlError: '配置错误: #apiName#缺少请求地址(url)',
@@ -7,3 +7,5 @@ export default {
   netError: '不支持的状态码：#status#',
   paramError: '缺少URL参数#param#'
 }
+
+export default defaultLang

@@ -1,19 +1,19 @@
-function isObj(obj) {
+function isObj(obj:any):boolean {
   return Object.prototype.toString.call(obj)=== '[object Object]'
 }
-function isArr(arr) {
+function isArr(arr:any):boolean {
   return Array.isArray(arr)
 }
-function isFun(fn) {
+function isFun(fn:any):boolean {
   return Object.prototype.toString.call(fn)=== '[object Function]'
 }
-function isBool (fromVal) {
+function isBool (fromVal:any):boolean {
   return fromVal === true || fromVal === false
 }
-function isStr (str) {
+function isStr (str:any):boolean {
   return typeof str == 'string'
 }
-function json2query (json) {
+function json2query (json:any):string {
   if (!json) return ''
   let queryArr = []
   for (const key in json) {
@@ -22,13 +22,13 @@ function json2query (json) {
   if (queryArr.length) return '?' + queryArr.join('&')
   else return ''
 }
-function cloneJson (json) {
+function cloneJson (json:any):any {
   if (json === undefined) return
   return JSON.parse(JSON.stringify(json))
 }
 
-function mergeJson (to, from) {
-  let res = {}
+function mergeJson (to:any, from:any):any {
+  let res:any = {}
   if (isObj(to)) res = cloneJson(to)
   if (isObj(from)) {
     for (const key in from) {

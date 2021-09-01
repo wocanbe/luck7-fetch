@@ -1,27 +1,30 @@
 import {isStr, cloneJson, mergeJson} from './util'
 import lang from './lang'
 
-function checkAllowMethod (method, key) {
+function checkAllowMethod (method:string, key:string):void {
   if (['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) === -1) {
     throw new Error(lang.methodError.replace('#apiName#', key).replace('#method#', method))
   }
 }
-function checkItem (reqConfig, key) {
-  if (isStr(reqConfig)) return {url: reqConfig}
-  if (!reqConfig.url) throw new Error(lang.urlError.replace('#apiName#', key))
-  if (reqConfig.method) {
-    reqConfig.method = reqConfig.method.toUpperCase()
-    checkAllowMethod(reqConfig.method, key)
+function checkItem (reqConfig:string|api, key:string):api {
+  if (isStr(reqConfig)) return {url: reqConfig as string}
+  else {
+    reqConfig = reqConfig as api
+    if (!reqConfig.url) throw new Error(lang.urlError.replace('#apiName#', key))
+    if (reqConfig.method) {
+      reqConfig.method = reqConfig.method.toUpperCase()
+      checkAllowMethod(reqConfig.method, key)
+    }
+    return reqConfig
   }
-  return reqConfig
 }
-function checkList (list) {
+function checkList (list:apiList) {
   for (const key in list) {
     list[key] = checkItem(list[key], key)
   }
   return list
 }
-function prefetch (url, params, isCros) {
+function prefetch (url:string, params:any, isCros:boolean):string {
   let urlRegx
   let domain = ''
   // 在请求发出之前进行一些操作
@@ -36,22 +39,23 @@ function prefetch (url, params, isCros) {
   urlRegx = /:(\w+)/
   let urlPat = url.match(urlRegx)
   while (urlPat !== null) {
+    const pat = urlPat[1]
     if (params instanceof FormData) {
-      if (params.has(urlPat[1])) {
-        url = url.replace(urlPat[0], params.get(urlPat[1]))
+      if (params.has(pat)) {
+        url = url.replace(urlPat[0], params.get(pat) as string)
       } else {
-        throw new Error(urlPat[1])
+        throw new Error(lang.paramError.replace('#param#', pat))
       }
-    } else if (params.hasOwnProperty(urlPat[1])) {
-      url = url.replace(urlPat[0], params[urlPat[1]])
+    } else if (params.hasOwnProperty(pat)) {
+      url = url.replace(urlPat[0], params[pat])
     } else {
-      throw new Error(urlPat[1])
+      throw new Error(lang.paramError.replace('#param#', pat))
     }
     urlPat = url.match(urlRegx)
   }
   return domain + url
 }
-function getAjaxConfig (reqConfig, params) {
+function getAjaxConfig (reqConfig:api, params:any) {
   let reqCfg = cloneJson(reqConfig.options)
   let data
   if (reqConfig.method) reqCfg.method = reqConfig.method
@@ -62,11 +66,7 @@ function getAjaxConfig (reqConfig, params) {
   }
 
   let reqUrl
-  try {
-    reqUrl = prefetch(reqConfig.url, data, reqConfig.isCros)
-  } catch (e) {
-    return new Error(lang.paramError.replace('#param#', e.message))
-  }
+  reqUrl = prefetch(reqConfig.url, data, reqConfig.isCros)
   reqCfg.data = data
   return [reqUrl, reqCfg]
 }

@@ -9,21 +9,21 @@ const defaultCfg = Symbol() // default
 const baseURL = Symbol() // base
 const getCfg = Symbol() // get
 const single = Symbol() // single
+
 const dafaultConfig = {
   timeout: 120000 // 默认超时2分钟
 }
 class Ajax {
-  constructor () {
-    if (arguments[0] instanceof Promise) {
-      arguments[0].then(res => {
-        this.init(res, arguments[1], arguments[2])
-      })
-    } else {
-      this.init(...arguments)
-      if (arguments[0].init) this.do('init')
-    }
+  [strictMode]:boolean = true;
+  [baseURL]:string = '/';
+  [ajaxList]:apiList = {};
+  [methodList]:apiMethod = {};
+  [defaultCfg]:any = {};
+  constructor (apiList:apiList, configs?:ajaxConfig, apiMethods?:apiMethod) {
+    this.init(apiList, configs, apiMethods)
+    if (arguments[0].init) this.do('init')
   }
-  init (apiList, configs = {}, apiMethods = {}) {
+  init (apiList:apiList, configs?:ajaxConfig, apiMethods?:apiMethod) {
     const options = mergeJson(dafaultConfig, configs.options)
     if (options.method) {
       options.method = options.method.toUpperCase()
@@ -34,29 +34,30 @@ class Ajax {
         if (defaultLang[key]) defaultLang[key] = configs.lang[key]
       }
     }
-    this[strictMode] = isBool(configs.isStrict) ? configs.isStrict : true
-    this[baseURL] = configs.baseURL || '/'
+    if (isBool(configs.isStrict)) this[strictMode] = configs.isStrict
+    if (configs.baseURL) this[baseURL] = configs.baseURL
     if (apiList) this[ajaxList] = checkList(apiList)
     else throw new Error(defaultLang.noList)
 
     this[methodList] = apiMethods
     this[defaultCfg] = options
   }
-  do (apiName, params) {
+  do (apiName:Array<string|api>|string|api, params?:any):Promise<any> {
     if (isArr(apiName)) {
       const ajaxReqs = []
-      for (var s in apiName) {
-        ajaxReqs.push(this[single](apiName[s], params[s]))
+      const apis = apiName as Array<string|api>
+      for (let order:number = 0; order < apis.length; order++) {
+        ajaxReqs.push(this[single](apis[order], params[order]))
       }
       return Promise.all(ajaxReqs)
-    } else return this[single](apiName, params)
+    } else return this[single]((apiName as string|api), params)
   }
-  [getCfg] (apiName, params) {
+  [getCfg] (apiName:string|api, params?:any) {
     let localConfig
     if (isStr(apiName)) {
-      const apiConfig = this[ajaxList][apiName]
+      const apiConfig = this[ajaxList][apiName as string]
       if (apiConfig) localConfig = cloneJson(apiConfig)
-      else if (this[strictMode]) throw new Error(defaultLang.noConfig.replace('#apiName#', apiName))
+      else if (this[strictMode]) throw new Error(defaultLang.noConfig.replace('#apiName#', apiName as string))
       else localConfig = {url: apiName}
     } else {
       if (this[strictMode]) throw new Error(defaultLang.typeError)
@@ -66,11 +67,10 @@ class Ajax {
     if (localConfig.options) localConfig.options = mergeJson(this[defaultCfg], localConfig.options)
     else localConfig.options = this[defaultCfg]
     const reqConfig = getAjaxConfig(localConfig, params)
-    if (reqConfig instanceof Error) throw reqConfig
     return reqConfig
   }
-  [single] (apiName, params) {
-    let reqUrl, reqConfig
+  [single] (apiName:string|api, params?:any) {
+    let reqUrl:string, reqConfig:any
     try {
       const lCfg = this[getCfg](apiName, params)
       reqUrl = lCfg[0]
@@ -78,12 +78,13 @@ class Ajax {
     } catch (e) {
       return Promise.reject(e)
     }
-    const filterFun = this[methodList][apiName] || this[methodList]['_']
-    let sucessFun, errorFun
+    let filterFun = this[methodList]['_']
+    if (isStr(apiName)) filterFun = this[methodList][apiName as string]
+    let sucessFun:Function, errorFun:Function
     if (isFun(filterFun)) {
       const filterObj = filterFun()
       if (isFun(filterObj)) {
-        sucessFun = filterObj
+        sucessFun = filterObj as Function
       } else {
         if (filterObj.error) errorFun = filterObj.error
         if (filterObj.request) {
@@ -119,7 +120,7 @@ class Ajax {
           resolve(data)
         } else {
           // 捕捉2XX(除200),304之类的返回
-          throw new Error(defaultLang.netError.replace('#status#', res.status))
+          throw new Error(defaultLang.netError.replace('#status#', res.status + ''))
         }
       } catch (err) {
         if (errorFun) errorFun(err)
