@@ -1,6 +1,6 @@
 # luck7-fetch
 
-可以拥有统一配置的项目层面的对ajax的再封装，使用简洁，可以同时存在多个
+可以拥有统一配置的项目层面的对ajax的再封装，体积小巧(仅5.5kb,开启gzip压缩后仅2.3kb)，使用简洁，可以同时存在多个
 
 ```javascript
 // 创建ajax对象
@@ -28,7 +28,7 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
     baseURL: '/', // 请求
     lang: Object, // 错误提示文本
     isStrict: true // 是否开启严格模式
-    options: {
+    options: { // 可参考fetch的配置，额外引入了timeout配置
       headers: {...},
       method: 'GET',
       timeout: 120000 // 单位毫秒
@@ -55,8 +55,8 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
   {
     key () { // key的唯一特例是'_',代表通用处理方法,将对所有未配置method的api生效
       return {
-        request (req) {return {}}, // 对request参数进行处理，返回处理后的请求参数
-        response (res) {return {}}, // 对返回数据进行处理，返回处理后的数据(也可以在这儿交由vuex处理，返回空对象)
+        request (req) { /* ... */ }, // 对request参数进行处理
+        response (res) { /* ... */ }, // 对返回数据进行处理
         error (err) {} // 对异常进行处理
       }
     }
@@ -75,7 +75,7 @@ const list = {
   // 可以简写为 demo1: '/mock1'
   // 使用请求超时
   demo2: {
-    method: 'GET', // 默认值为POST
+    method: 'POST', // 默认值为GET
     url: '/mock2', // 请求地址，必填且不能为空
     options: { // 请求配置项
       timeout: 1000, // 请求超时时间
@@ -112,14 +112,11 @@ const methods = {
           }
           backData[k] = v
         }
-        // req.data = backData
-        return req
+        req.data = backData
       },
       response (res) {
         if (res.code !== 0) { // 抛出异常
           throw new Error(res.msg)
-        } else {
-          return res.data
         }
       }
     }
