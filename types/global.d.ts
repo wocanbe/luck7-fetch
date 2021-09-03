@@ -33,6 +33,6 @@ interface apiMethod {
 }
 declare class Ajax {
   constructor(apiList:apiList, ajaxConfig:ajaxConfig, apiMethods:apiMethod);
-  setFetch(fetch:Function):void;
+  setFetch(fetch:(url: string, options?: any) => Promise<any>):void;
   do(apiName:string|api, params:any):Promise<any>;
 }

@@ -17,9 +17,6 @@
   "scripts": {
     "build": "rollup -c"
   },
-  "peerDependencies": {
-    "node-fetch": "^2.6.1"
-  },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-plugin-transform-runtime": "^6.23.0",

@@ -3,8 +3,29 @@
 可以拥有统一配置的项目层面的对ajax的再封装，体积小巧(仅5.5kb,开启gzip压缩后仅2.3kb)，使用简洁，可以同时存在多个
 
 ```javascript
+import Ajax from 'luck7-fetch'
+
 // 创建ajax对象
 const ajax = new Ajax(apiLists, ajaxConfigs, apiMethods)
+// 使用ajax对象发起请求
+ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
+  .then(res => {
+    console.log(res)
+  }).catch(err => {
+    console.error(err)
+  })
+```
+
+## 如何在node中使用
+
+```javascript
+import fetch from 'node-fetch'
+import Ajax from 'luck7-fetch'
+
+// 创建ajax对象
+const ajax = new Ajax(apiLists, ajaxConfigs, apiMethods)
+// 指定node环境使用的fetch
+ajax.setFetch(fetch)
 // 使用ajax对象发起请求
 ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
   .then(res => {
