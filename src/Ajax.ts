@@ -80,7 +80,10 @@ class Ajax {
       return Promise.reject(e)
     }
     let filterFun = this.#methods['_']
-    if (isStr(apiName)) filterFun = this.#methods[apiName as string]
+    if (isStr(apiName)) {
+      const apiFun = this.#methods[apiName as string]
+      if (apiFun) filterFun = apiFun
+    }
     let sucessFun:Function, errorFun:Function
     if (isFun(filterFun)) {
       const filterObj = filterFun()
