@@ -1,4 +1,3 @@
-import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import typescript from '@rollup/plugin-typescript'
 import {terser} from 'rollup-plugin-terser'
@@ -10,20 +9,20 @@ function getConfig (format) {
     output: {
       file: 'dist/index.' + format + '.js',
       format: format,
-      name: 'luck7-fetch',
-      sourceMap: true
+      name: 'luck7-fetch'
     },
-    plugins: [
-      resolve(),
-      commonjs(),
-      typescript(),
-      terser()
-    ]
+    plugins: []
   }
+  if (format === 'cjs') {
+    config.output.exports = 'default'
+    config.plugins.push(commonjs())
+  }
+  config.plugins.push(typescript())
+  config.plugins.push(terser({ format: { comments: false } }))
   if (format === 'esm') {
     config.plugins.push(copy({
       targets: [
-        { src: 'types/global.d.ts', dest: 'dist', rename: 'index.d.ts' }
+        { src: 'types/index.d.ts', dest: 'dist', rename: 'index.d.ts' }
       ]
     }))
   }

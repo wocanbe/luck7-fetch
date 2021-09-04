@@ -2,7 +2,7 @@
   "name": "luck7-fetch",
   "author": "584069777@qq.com",
   "license": "ISC",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "keywords": [
     "ajax",
     "fetch",
@@ -20,7 +20,6 @@
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^20.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.4",
     "@rollup/plugin-typescript": "^8.2.5",
     "rollup": "^2.56.3",
     "rollup-plugin-copy": "^3.4.0",

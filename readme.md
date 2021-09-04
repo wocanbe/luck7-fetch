@@ -1,6 +1,6 @@
 # luck7-fetch
 
-可以拥有统一配置的项目层面的对ajax的再封装，体积小巧(仅5.5kb,开启gzip压缩后仅2.3kb)，使用简洁，可以同时存在多个
+可以拥有统一配置的项目层面的对ajax的再封装，没有任何依赖，体积小巧(仅4.5kb,开启gzip压缩后仅2kb)，使用简洁，可以同时存在多个
 
 ```javascript
 import Ajax from 'luck7-fetch'
