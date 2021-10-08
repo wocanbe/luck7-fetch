@@ -104,7 +104,7 @@ class Ajax {
     }
     reqUrl = this.#baseURL + reqUrl
     let reqData = reqConfig.data
-    if (reqConfig.method === 'GET') {
+    if (!reqConfig.method || reqConfig.method === 'GET') {
       reqUrl = reqUrl + json2query(reqData)
     } else if (reqData instanceof FormData) {
       if (reqConfig.headers) delete reqConfig.headers['Content-Type']

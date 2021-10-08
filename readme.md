@@ -3,10 +3,10 @@
 可以拥有统一配置的项目层面的对ajax的再封装，没有任何依赖，体积小巧(仅4.5kb,开启gzip压缩后仅2kb)，使用简洁，可以同时存在多个
 
 ```javascript
-import Ajax from 'luck7-fetch'
+import L7Fetch from 'luck7-fetch'
 
 // 创建ajax对象
-const ajax = new Ajax(apiLists, ajaxConfigs, apiMethods)
+const ajax = new L7Fetch(apiLists, ajaxConfigs, apiMethods)
 // 使用ajax对象发起请求
 ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
   .then(res => {
@@ -16,23 +16,39 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
   })
 ```
 
-## 如何在node中使用
+## 在node中使用
 
 ```javascript
 import fetch from 'node-fetch'
-import Ajax from 'luck7-fetch'
+import L7Fetch from 'luck7-fetch'
 
 // 创建ajax对象
-const ajax = new Ajax(apiLists, ajaxConfigs, apiMethods)
+const ajax = new L7Fetch(apiLists, ajaxConfigs, apiMethods)
 // 指定node环境使用的fetch
 ajax.setFetch(fetch)
-// 使用ajax对象发起请求
-ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
-  .then(res => {
-    console.log(res)
-  }).catch(err => {
-    console.error(err)
-  })
+// ...
+```
+
+
+## 在浏览器中使用
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my test</title>
+  <script src="https://21d.cc/js/l7fetch.min.js"></script>
+</head>
+<body>
+  <script>
+    // ...
+    const ajax = new L7Fetch(apiLists, ajaxConfigs, apiMethods)
+    // ...
+  </script>
+</body>
+</html>
 ```
 
 ## 参数
@@ -50,7 +66,9 @@ ajax.do(apiName, params) // 没有请求参数的时候，params可以不写
     lang: Object, // 错误提示文本
     isStrict: true // 是否开启严格模式
     options: { // 可参考fetch的配置，额外引入了timeout配置
-      headers: {...},
+      headers: {
+        // ...
+      },
       method: 'GET',
       timeout: 120000 // 单位毫秒
     } // 请求配置项
