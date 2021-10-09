@@ -11,10 +11,11 @@ function getConfig (format) {
       format: format,
       name: 'L7Fetch'
     },
-    plugins: []
+    plugins: [
+      typescript(),
+      terser({ format: { comments: false } })
+    ]
   }
-  config.plugins.push(typescript())
-  config.plugins.push(terser({ format: { comments: false } }))
   if (format === 'esm') {
     config.plugins.push(copy({
       targets: [

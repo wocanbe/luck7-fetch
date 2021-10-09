@@ -39,7 +39,7 @@ ajax.setFetch(fetch)
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>my test</title>
-  <script src="https://21d.cc/js/l7fetch.min.js"></script>
+  <script src="https://my.domain/js/l7fetch.min.js"></script>
 </head>
 <body>
   <script>
@@ -179,7 +179,6 @@ const methods = {
 export {list, ajaxConfigs, methods}
 
 // src/utils/ajax.js
-import isFunction from 'lodash/isFunction'
 import Ajax from 'luck7-ajax'
 import {list, ajaxConfigs, methods} from '../config/ajax'
 

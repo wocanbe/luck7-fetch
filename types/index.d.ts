@@ -31,9 +31,9 @@ interface methodFun {
 interface apiMethod {
   [propName:string]:() => methodFun
 }
-declare class Ajax {
+declare class L7Fetch {
   constructor(apiList:apiList, ajaxConfig:ajaxConfig, apiMethods:apiMethod);
   setFetch(fetch:(url: string, options?: any) => Promise<any>):void;
   do(apiName:string|api, params:any):Promise<any>;
 }
-export = Ajax
+export = L7Fetch
