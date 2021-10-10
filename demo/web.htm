@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>web demo</title>
+</head>
+<body>
+  <script type="module">
+    import _ajax from './ajax.mjs'
+    const ajax = function (apiName, params) {
+      return _ajax.do(apiName, params)
+    }
+    ajax('demo3', {
+      id: 1,
+      pageNo: 1,
+      size: 10
+    }).then((data) => {
+      console.log(data)
+    }).catch((e) => {
+      console.error(e.message)
+    })
+
+    ajax(['demo1', 'demo2'], [])
+      .then((datas) => {
+        console.log(datas[0], datas[1])
+      }).catch((err) => {
+        console.error(err.message)
+      })
+
+    ajax('demo4').then((data) => {
+      console.log(data)
+    }).catch((e) => {
+      console.error(e.message)
+    })
+
+    ajax(
+      '/login',
+      {
+        username: 'admin',
+        password: 'admin'
+      }
+    ).then((data) => {
+      console.log(data)
+    }).catch((e) => {
+      console.error(e.message)
+    })
+  </script>
+</body>
+</html>

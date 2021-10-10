@@ -1,6 +1,7 @@
 import {isStr, cloneJson, mergeJson} from './util'
 import lang from './lang'
 
+const isWeb = typeof window === 'object'
 function checkAllowMethod (method:string, key:string):void {
   if (['GET', 'POST', 'PUT', 'DELETE'].indexOf(method) === -1) {
     throw new Error(lang.methodError.replace('#apiName#', key).replace('#method#', method))
@@ -40,7 +41,7 @@ function prefetch (url:string, params:any, isCros:boolean):string {
   let urlPat = url.match(urlRegx)
   while (urlPat !== null) {
     const pat = urlPat[1]
-    if (params instanceof FormData) {
+    if (isWeb && params instanceof FormData) {
       if (params.has(pat)) {
         url = url.replace(urlPat[0], params.get(pat) as string)
       } else {
@@ -59,7 +60,7 @@ function getAjaxConfig (reqConfig:api, params:any) {
   let reqCfg = cloneJson(reqConfig.options)
   let data
   if (reqConfig.method) reqCfg.method = reqConfig.method
-  if (params instanceof FormData) {
+  if (isWeb && params instanceof FormData) {
     data = params
   } else {
     data = mergeJson(reqConfig.options.data, params)

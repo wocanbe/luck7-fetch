@@ -2,7 +2,7 @@
   "name": "luck7-fetch",
   "author": "584069777@qq.com",
   "license": "ISC",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "keywords": [
     "ajax",
     "fetch",
@@ -10,16 +10,19 @@
   ],
   "description": "A tool to manage AJAX of project",
   "files": [
-    "dist"
+    "dist",
+    "demo"
   ],
   "main": "dist/index.esm.js",
   "type": "module",
   "typings": "dist/index.d.ts",
   "scripts": {
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "test": "node --experimental-modules demo/node.mjs"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.5",
+    "node-fetch": "^3.0.0",
     "rollup": "^2.56.3",
     "rollup-plugin-copy": "^3.4.0",
     "rollup-plugin-terser": "^7.0.2",
@@ -27,7 +30,7 @@
     "typescript": "^4.4.3"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "repository": {
     "type": "git",

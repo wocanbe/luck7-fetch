@@ -5,7 +5,9 @@ import {checkList, checkItem, checkAllowMethod, getAjaxConfig} from './lib/tools
 const dafaultConfig = {
   timeout: 120000 // 默认超时2分钟
 }
-let fetch:(url: string, options?: any) => Promise<any> = window.fetch
+const isWeb = typeof window === 'object'
+let fetch:(url: string, options?: any) => Promise<any>
+if (isWeb) fetch = window.fetch
 class Ajax {
   #strict:boolean = true;
   #baseURL:string = '/';
@@ -67,6 +69,7 @@ class Ajax {
     if (localConfig.options) localConfig.options = mergeJson(this.#defaultCfg, localConfig.options)
     else localConfig.options = this.#defaultCfg
     const reqConfig = getAjaxConfig(localConfig, params)
+    if (!localConfig.isCros) reqConfig[0] = this.#baseURL + reqConfig[0]
     return reqConfig
   }
 
@@ -102,11 +105,11 @@ class Ajax {
         if (filterObj.response) sucessFun = filterObj.response
       }
     }
-    reqUrl = this.#baseURL + reqUrl
+
     let reqData = reqConfig.data
     if (!reqConfig.method || reqConfig.method === 'GET') {
       reqUrl = reqUrl + json2query(reqData)
-    } else if (reqData instanceof FormData) {
+    } else if (isWeb && reqData instanceof FormData) {
       if (reqConfig.headers) delete reqConfig.headers['Content-Type']
       reqConfig.body = reqData
     } else {
