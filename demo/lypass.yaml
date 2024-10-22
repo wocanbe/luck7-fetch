@@ -1,6 +1,7 @@
 payload:
 - DOMAIN-SUFFIX,hf-mirror.com
 - DOMAIN-SUFFIX,huggingface.co
+- DOMAIN-SUFFIX,hf.co
 - DOMAIN-SUFFIX,github.com
 - DOMAIN-SUFFIX,github.io
 - DOMAIN-SUFFIX,githubusercontent.com
