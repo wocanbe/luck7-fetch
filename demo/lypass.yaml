@@ -4,6 +4,8 @@ payload:
 - DOMAIN-SUFFIX,hf.co
 - DOMAIN-SUFFIX,github.com
 - DOMAIN-SUFFIX,github.io
+- DOMAIN-SUFFIX,pypi.org
+- DOMAIN-SUFFIX,anaconda.com
 - DOMAIN-SUFFIX,githubusercontent.com
 - DOMAIN-SUFFIX,coo.ga
 - DOMAIN-SUFFIX,pikachucloud.site
