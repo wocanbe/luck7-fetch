@@ -7,6 +7,7 @@ payload:
 - DOMAIN-SUFFIX,githubassets.com
 - DOMAIN-SUFFIX,githubusercontent.com
 - DOMAIN-SUFFIX,pypi.org
+- DOMAIN-SUFFIX,pythonhosted.org
 - DOMAIN-SUFFIX,anaconda.com
 - DOMAIN-SUFFIX,coo.ga
 - DOMAIN-SUFFIX,pikachucloud.site
