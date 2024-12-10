@@ -13,6 +13,7 @@ payload:
 - DOMAIN-SUFFIX,pikachucloud.site
 - DOMAIN-SUFFIX,download-hiccup.xyz
 - DOMAIN-SUFFIX,ubuntu.com
+- DOMAIN-SUFFIX,docker.io
 # AI对话相关
 - DOMAIN-SUFFIX,snapcraft.io
 - DOMAIN-SUFFIX,185.125.190.57
